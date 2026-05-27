@@ -10,7 +10,7 @@ Future<void> cryptoWorker(dynamic initialTask) async {
   final receivePort = ReceivePort();
   final mainIsolatePort = initialTask.sendPort;
 
-  final sodium = await SodiumInit.init(_loadSodium);
+  final sodium = await SodiumInit.init();
   final box = sodium.crypto.box;
   final sign = sodium.crypto.sign;
 
@@ -33,6 +33,8 @@ Future<void> cryptoWorker(dynamic initialTask) async {
       try {
         switch (task.type) {
           case TaskType.seal:
+
+            /// The header is added first, followed by the sealed payload if present.
             // ignore: deprecated_export_use
             final signedDatagram = BytesBuilder(copy: false)
               ..add(Message.getHeader(task.datagram));
@@ -79,7 +81,7 @@ Future<void> cryptoWorker(dynamic initialTask) async {
                 ? (id: task.id, datagram: emptyUint8List)
                 : (id: task.id, error: const ExceptionInvalidSignature()));
         }
-      } catch (e) {
+      } on Exception catch (e) {
         mainIsolatePort.send((id: task.id, error: e));
       }
     },
@@ -91,15 +93,4 @@ Future<void> cryptoWorker(dynamic initialTask) async {
   );
 }
 
-DynamicLibrary _loadSodium() {
-  if (Platform.isIOS) return DynamicLibrary.process();
-  if (Platform.isAndroid) return DynamicLibrary.open('libsodium.so');
-  if (Platform.isLinux) return DynamicLibrary.open('libsodium.so.23');
-  if (Platform.isMacOS) {
-    return DynamicLibrary.open('/usr/local/lib/libsodium.dylib');
-  }
-  if (Platform.isWindows) {
-    return DynamicLibrary.open(r'C:\Windows\System32\libsodium.dll');
-  }
-  throw const OSError('[Crypto] Platform not supported');
-}
+// _loadSodium is no longer used in sodium 4.x with Native Assets.

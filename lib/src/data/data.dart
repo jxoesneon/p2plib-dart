@@ -21,7 +21,7 @@ part 'address_properties.dart';
 
 typedef PeerStatus = ({PeerId peerId, bool isOnline});
 
-final emptyUint8List = Uint8List(0);
+final Uint8List emptyUint8List = Uint8List(0);
 
 int genRandomInt() =>
     (_random.nextInt(_maxRandomNumber) << 32) |
@@ -35,6 +35,6 @@ Uint8List getRandomBytes(int length) {
   return r;
 }
 
-const _maxRandomNumber = 1 << 32;
+const int _maxRandomNumber = 1 << 32;
 
-final _random = Random.secure();
+final Random _random = Random.secure();

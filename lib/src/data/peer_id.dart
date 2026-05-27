@@ -1,8 +1,8 @@
 part of 'data.dart';
 
 class PeerId extends Token {
-  static const _keyLength = 32;
-  static const length = _keyLength * 2;
+  static const int _keyLength = 32;
+  static const int length = _keyLength * 2;
 
   PeerId({required super.value}) {
     if (value.length != length) const FormatException('PeerId length');

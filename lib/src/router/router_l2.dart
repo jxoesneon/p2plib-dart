@@ -65,7 +65,7 @@ class RouterL2 extends RouterL1 {
       await sendMessage(isConfirmable: true, dstPeerId: peerId);
       _lastSeenController.add((peerId: peerId, isOnline: true));
       return true;
-    } catch (_) {}
+    } on Exception catch (_) {}
     _lastSeenController.add((peerId: peerId, isOnline: getPeerStatus(peerId)));
     return false;
   }

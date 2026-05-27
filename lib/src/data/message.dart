@@ -7,9 +7,9 @@ part of 'data.dart';
 /// 64 bytes - signature
 
 class Message {
-  static const protocolNumber = 0;
-  static const headerLength = PacketHeader.length + PeerId.length * 2;
-  static const emptySignedMessageLength = headerLength + signatureLength;
+  static const int protocolNumber = 0;
+  static const int headerLength = PacketHeader.length + PeerId.length * 2;
+  static const int emptySignedMessageLength = headerLength + signatureLength;
 
   static bool hasCorrectLength(Uint8List datagram) =>
       datagram.length == emptySignedMessageLength ||

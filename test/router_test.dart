@@ -1,4 +1,6 @@
-// ignore_for_file: avoid_print, inference_failure_on_instance_creation
+/// This file contains integration tests for the RouterL2 class, verifying P2P communication,
+/// bootstrapping, and message delivery.
+library;
 
 import 'dart:async';
 import 'package:test/test.dart';
@@ -139,13 +141,13 @@ Future<void> main() async {
               .listen((e) => isOnline = e.isOnline);
 
           expect(await aliceRouter.pingPeer(bobRouter.selfId), true);
-          await Future.delayed(initTime);
+          await Future<void>.delayed(initTime);
           expect(isOnline, true);
 
           bobRouter.stop();
           expect(await aliceRouter.pingPeer(bobRouter.selfId), false);
 
-          await Future.delayed(aliceRouter.peerOnlineTimeout);
+          await Future<void>.delayed(aliceRouter.peerOnlineTimeout);
           expect(isOnline, false);
           expect(aliceRouter.getPeerStatus(bobRouter.selfId), false);
           await subscription.cancel();
@@ -173,11 +175,11 @@ Future<void> main() async {
           expect(bobRouter.getPeerStatus(aliceRouter.selfId), false);
 
           expect(await aliceRouter.pingPeer(bobRouter.selfId), true);
-          await Future.delayed(initTime);
+          await Future<void>.delayed(initTime);
           expect(aliceRouter.getPeerStatus(bobRouter.selfId), true);
           expect(bobRouter.getPeerStatus(aliceRouter.selfId), true);
 
-          await Future.delayed(aliceRouter.peerOnlineTimeout * 1.1);
+          await Future<void>.delayed(aliceRouter.peerOnlineTimeout * 1.1);
           expect(aliceRouter.getPeerStatus(bobRouter.selfId), false);
           expect(bobRouter.getPeerStatus(aliceRouter.selfId), false);
         },
@@ -214,7 +216,7 @@ Future<void> main() async {
           await Future.wait([aliceRouter.start(), bobRouter.start()]);
           await aliceRouter.sendMessage(dstPeerId: proxyPeerId);
           await bobRouter.sendMessage(dstPeerId: proxyPeerId);
-          await Future.delayed(initTime);
+          await Future<void>.delayed(initTime);
 
           final completer = Completer<bool>();
           subscription.onData((message) {
@@ -238,9 +240,9 @@ Future<void> main() async {
           bobRouter.routes[proxyPeerId] = proxyRoute;
           await Future.wait([aliceRouter.start(), bobRouter.start()]);
           await aliceRouter.sendMessage(dstPeerId: proxyPeerId);
-          await Future.delayed(initTime);
+          await Future<void>.delayed(initTime);
           await bobRouter.sendMessage(dstPeerId: proxyPeerId);
-          await Future.delayed(initTime);
+          await Future<void>.delayed(initTime);
 
           final completer = Completer<bool>();
           subscription.onData((message) {
@@ -298,12 +300,12 @@ Future<void> main() async {
               .listen((e) => isOnline = e.isOnline);
 
           expect(await aliceRouter.pingPeer(bobRouter.selfId), true);
-          await Future.delayed(initTime);
+          await Future<void>.delayed(initTime);
           expect(isOnline, true);
 
           bobRouter.stop();
           await aliceRouter.pingPeer(bobRouter.selfId);
-          await Future.delayed(aliceRouter.peerOnlineTimeout);
+          await Future<void>.delayed(aliceRouter.peerOnlineTimeout);
 
           expect(isOnline, false);
           expect(aliceRouter.getPeerStatus(bobRouter.selfId), false);
@@ -319,20 +321,25 @@ Future<void> main() async {
           aliceRouter.routes[proxyPeerId] = proxyRoute;
           bobRouter.routes[proxyPeerId] = proxyRoute;
           await Future.wait([aliceRouter.start(), bobRouter.start()]);
-          await Future.delayed(initTime);
+          await Future<void>.delayed(initTime);
           await aliceRouter.sendMessage(dstPeerId: proxyPeerId);
-          await Future.delayed(initTime);
+          await Future<void>.delayed(initTime);
           await bobRouter.sendMessage(dstPeerId: proxyPeerId);
 
           expect(aliceRouter.getPeerStatus(bobRouter.selfId), false);
           expect(bobRouter.getPeerStatus(aliceRouter.selfId), false);
 
           expect(await aliceRouter.pingPeer(bobRouter.selfId), true);
+          await Future<void>.delayed(initTime);
           expect(aliceRouter.getPeerStatus(bobRouter.selfId), true);
           expect(bobRouter.getPeerStatus(aliceRouter.selfId), true);
 
-          await Future.delayed(aliceRouter.peerOnlineTimeout * 1.5);
+          await Future<void>.delayed(aliceRouter.peerOnlineTimeout * 1.5);
+          /// Explaining ignore.
+    // ignore: avoid_print
           print(aliceRouter.routes);
+          /// Explaining ignore.
+    // ignore: avoid_print
           print(bobRouter.routes);
           expect(aliceRouter.getPeerStatus(bobRouter.selfId), false);
           expect(bobRouter.getPeerStatus(aliceRouter.selfId), false);
@@ -345,11 +352,11 @@ Future<void> main() async {
         aliceRouter.routes[proxyPeerId] = proxyRoute;
         bobRouter.routes[proxyPeerId] = proxyRoute;
         await Future.wait([aliceRouter.start(), bobRouter.start()]);
-        await Future.delayed(initTime);
+        await Future<void>.delayed(initTime);
         await aliceRouter.sendMessage(dstPeerId: proxyPeerId);
-        await Future.delayed(initTime);
+        await Future<void>.delayed(initTime);
         await bobRouter.sendMessage(dstPeerId: proxyPeerId);
-        await Future.delayed(initTime);
+        await Future<void>.delayed(initTime);
 
         final header = PacketHeader(
           messageType: PacketType.confirmable,

@@ -19,7 +19,7 @@ class TransportUdp extends TransportBase {
         ttl: ttl,
       );
       _socket?.listen(_onData);
-    } catch (e) {
+    } on Exception catch (e) {
       logger?.call(e.toString());
     }
   }
@@ -41,7 +41,7 @@ class TransportUdp extends TransportBase {
       if (peerFullAddress.type != bindAddress.type) continue;
       try {
         _socket?.send(datagram, peerFullAddress.address, peerFullAddress.port);
-      } catch (e) {
+      } on Exception catch (e) {
         logger?.call(e.toString());
       }
     }
@@ -63,7 +63,8 @@ class TransportUdp extends TransportBase {
         datagram: datagram.data,
       ));
     } on StopProcessing catch (_) {
-    } catch (e) {
+      // Stop processing current packet.
+    } on Exception catch (e) {
       logger?.call(e.toString());
     }
   }

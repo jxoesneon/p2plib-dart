@@ -2,16 +2,16 @@ name: p2plib
 description: 'Tooling for encrypted udp datagram peer to peer communication'
 homepage: https://github.com/alexandrim0/p2plib-dart
 
-version: 2.2.2
+version: 2.3.2
 
 environment:
   sdk: '>=3.5.0 <4.0.0'
 
 dependencies: 
   meta: ^1.10.0
-  sodium: ^3.2.0
+  sodium: ^4.0.2+1
   collection: ^1.17.0
 
 dev_dependencies:
   test: ^1.24.3
-  very_good_analysis: ^6.0.0
+  very_good_analysis: ^10.2.0
